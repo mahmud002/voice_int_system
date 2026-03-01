@@ -4,51 +4,76 @@
 
 {% block content %}
 
-<div class="card">
-    <h2>Create your account</h2>
-    
-    <form method="post">
-        {% csrf_token %}
+<div class="login-page">
+    <div class="login-container">
 
-        <div class="form-group">
-            <label for="id_email">Email address</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">
-                    {{ form.email.errors|join:" " }}
-                </div>
-            {% endif %}
+        <div class="login-header">
+            <h2>Create your account</h2>
+            <p>Join Voice Intelligence System and get started</p>
         </div>
 
-        <div class="form-group">
-            <label for="id_password1">Password</label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <div style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">
-                    {{ form.password1.errors|join:" " }}
+        <div class="login-body">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="error-message"{% if message.tags == 'success' %} style="background:#ecfdf5; border-color:#a7f3d0; color:#065f46;"{% endif %}>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="error-message">
+                    {{ form.non_field_errors|join:"<br>" }}
                 </div>
             {% endif %}
-        </div>
 
-        <div class="form-group">
-            <label for="id_password2">Confirm password</label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <div style="color: var(--danger); font-size: 0.875rem; margin-top: 0.25rem;">
-                    {{ form.password2.errors|join:" " }}
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error-message" style="margin-top:8px;">{{ form.username.errors|join:"<br>" }}</div>
+                    {% endif %}
                 </div>
-            {% endif %}
+
+                <div class="form-group">
+                    <label for="{{ form.password1.id_for_label }}">Password</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <div class="error-message" style="margin-top:8px;">{{ form.password1.errors|join:"" }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <div class="error-message" style="margin-top:8px;">{{ form.password2.errors|join:"<br>" }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.user_type.id_for_label }}">Register as</label>
+                    {{ form.user_type }}
+                    {% if form.user_type.errors %}
+                        <div class="error-message" style="margin-top:8px;">{{ form.user_type.errors|join:"<br>" }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    Create Account
+                </button>
+            </form>
+
+            <div class="signup-link">
+                Already have an account? <a href="{% url 'login' %}">Sign in</a>
+            </div>
+
         </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%;">
-            Create account
-        </button>
-    </form>
-
-    <p style="margin-top: 1.5rem; text-align: center; color: var(--gray-600);">
-        Already have an account? 
-        <a href="{% url 'login' %}" class="link">Sign in</a>
-    </p>
+    </div>
 </div>
 
 {% endblock %}
