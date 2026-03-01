@@ -118,9 +118,15 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'          # Must start and end with slash
+
+# This is the MOST IMPORTANT line for project-level static folder
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',         # ← folder next to manage.py
+]
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
