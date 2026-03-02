@@ -1,272 +1,407 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - Voice Intelligence System{% endblock %}
+{% block title %}Voice Intelligence System – Voice AI for Everyone{% endblock %}
 
 {% block content %}
 
-<!-- Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <h1>Voice Intelligence System</h1>
-        <p class="hero-subtitle">
-            Speak naturally. Get intelligent results.<br>
-            The future of interaction starts with your voice.
-        </p>
+<!-- Hero -->
+<section class="hero-section">
+  <div class="container hero-container">
+    <div class="hero-left">
+      <h1 class="hero-title">
+        Voice Intelligence <br>
+        <span class="highlight">Platform</span>
+      </h1>
 
-        <div class="hero-buttons">
-            {% if user.is_authenticated %}
-                <a href="#" class="btn btn-primary btn-large">Go to Dashboard</a>
-                <a href="#" class="btn btn-outline btn-large">Try Voice Command</a>
-            {% else %}
-                <a href="{% url 'register' %}" class="btn btn-primary btn-large">Get Started — It's Free</a>
-                <a href="{% url 'login' %}" class="btn btn-outline btn-large">Sign In</a>
-            {% endif %}
-        </div>
+      <p class="hero-subtitle">
+        Identify speakers, detect fakes, monitor YouTube channels, 
+        perform sentiment analysis — all from voice data.
+      </p>
 
-        <div class="hero-trust">
-            <span>Trusted by students, teachers & institutions</span>
-        </div>
+      <div class="hero-buttons">
+        {% if user.is_authenticated %}
+          <a href="#" class="btn btn-primary btn-lg">Go to Dashboard</a>
+          <a href="#" class="btn btn-outline btn-lg">Try Demo</a>
+        {% else %}
+          <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+            Get Started — Free
+          </a>
+          <a href="{% url 'login' %}" class="btn btn-outline btn-lg">
+            Sign In
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="hero-badges">
+        <span class="badge">No credit card required</span>
+        <span class="badge">GDPR Compliant</span>
+        <span class="badge">Fast & Accurate</span>
+      </div>
     </div>
+
+    <div class="hero-right">
+      <div class="hero-visual">
+        <!-- You can replace this with real illustration / screenshot later -->
+        <div class="mockup-wrapper">
+          <div class="mockup-wave"></div>
+          <div class="mockup-phone">
+            <div class="mockup-screen">
+              <div class="mockup-content">
+                <div class="mockup-header">Voice Analysis</div>
+                <div class="mockup-stats">
+                  <div>Speaker Match: 98.7%</div>
+                  <div>Sentiment: Positive</div>
+                  <div>Real Voice: Verified</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Features Section -->
-<section class="features">
-    <div class="section-header">
-        <h2>Why Choose Voice Intelligence?</h2>
-        <p>Powerful features designed for real people and real use cases.</p>
+<!-- Features -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-title-center">
+      <h2>Powerful Voice AI Features</h2>
+      <p>Everything you need to analyze, verify and monitor voice content</p>
     </div>
 
     <div class="features-grid">
+      <!-- 1 -->
+       <a href="" class="feature-link">
         <div class="feature-card">
-            <div class="feature-icon">🎤</div>
-            <h3>Natural Voice Input</h3>
-            <p>Speak freely — no rigid commands. Our system understands context and intent.</p>
+            <div class="feature-icon">🗄️</div>
+            <h3>Speaker from Existing DB</h3>
+            <p>Instantly identify known speakers from your database using voice embeddings.</p>
         </div>
+    </a>
+      <!-- 2 -->
+       <a href="/internal/similarity_checking/" class="feature-link">
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Speaker Similarity Checking</h3>
+            <p>Compare two or more voices and get a precise similarity score.</p>
+        </div>
+      </a>
 
+      <!-- 3 -->
+       <a href="" class="feature-link">
         <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <h3>Instant Intelligence</h3>
-            <p>Real-time answers, summaries, translations, and task execution from voice alone.</p>
+            <div class="feature-icon">🛡️</div>
+            <h3>Speaker Verification (Fake vs Real)</h3>
+            <p>Detect deepfake voices, synthetic speech and replay attacks with high accuracy.</p>
         </div>
+    </a>
 
-        <div class="feature-card">
-            <div class="feature-icon">🔒</div>
-            <h3>Privacy First</h3>
-            <p>Your voice data stays yours. Local processing options + strong encryption.</p>
-        </div>
+      <!-- 4 -->
+       <a href="" class="feature-link">
+      <div class="feature-card">
+        <div class="feature-icon">📺</div>
+        <h3>YouTube Channel Monitoring</h3>
+        <p>Track sentiment, controversial topics and speaker changes across videos.</p>
+      </div>
+        </a>
+
+      <!-- 5 -->
+       <a href="" class="feature-link">
+      <div class="feature-card">
+        <div class="feature-icon">🔎</div>
+        <h3>Search in YouTube Channel/Link</h3>
+        <p>Search inside video transcripts, comments or audio content by keywords or voice.</p>
+      </div>
+      
     </div>
+  </div>
 </section>
 
-<!-- Stats / Trust Section -->
-<section class="stats">
-    <div class="stats-grid">
-        <div class="stat-item">
-            <div class="stat-number">10k+</div>
-            <div class="stat-label">Active Users</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">98%</div>
-            <div class="stat-label">Voice Recognition Accuracy</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">24/7</div>
-            <div class="stat-label">Always Available</div>
-        </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="final-cta">
-    <h2>Ready to speak smarter?</h2>
-    <p>Join thousands already using Voice Intelligence every day.</p>
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container cta-container">
+    <h2>Ready to secure & understand voice data?</h2>
+    <p>Join researchers, journalists, educators and businesses already using Voice Intelligence.</p>
 
     {% if user.is_authenticated %}
-        <a href="#" class="btn btn-primary btn-large">Open Dashboard</a>
+      <a href="#" class="btn btn-primary btn-xl">Open Dashboard</a>
     {% else %}
-        <a href="{% url 'register' %}" class="btn btn-primary btn-large">Start Free Trial</a>
+      <a href="{% url 'register' %}" class="btn btn-primary btn-xl">
+        Create Free Account
+      </a>
     {% endif %}
+  </div>
 </section>
 
+{% endblock %}
+
+
+{% block extra_css %}
 <style>
-    /* ──────────────────────────────
-       Home page specific styles
-    ────────────────────────────── */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-600: #475569;
+  --gray-900: #0f172a;
+}
 
-    .hero {
-        padding: 8rem 1.5rem 6rem;
-        text-align: center;
-        background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-        position: relative;
-        overflow: hidden;
-    }
+/* ======================
+   HERO SECTION
+====================== */
 
-    .hero::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: radial-gradient(circle at 30% 20%, rgba(99,102,241,0.08) 0%, transparent 50%);
-        pointer-events: none;
-    }
+.hero-section {
+  padding: 8rem 0 10rem;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+  position: relative;
+  overflow: hidden;
+}
 
-    .hero-content {
-        max-width: 900px;
-        margin: 0 auto;
-        position: relative;
-    }
+.hero-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1280px;
+}
 
-    .hero h1 {
-        font-size: clamp(2.8rem, 8vw, 4.5rem);
-        font-weight: 700;
-        margin-bottom: 1.2rem;
-        color: var(--gray-900);
-        line-height: 1.1;
-    }
+.hero-title {
+  font-size: 3.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--gray-900);
+}
 
-    .hero-subtitle {
-        font-size: clamp(1.25rem, 4vw, 1.5rem);
-        color: var(--gray-600);
-        margin-bottom: 2.5rem;
-        line-height: 1.4;
-    }
+.highlight {
+  color: var(--primary);
+}
 
-    .hero-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 1.2rem;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
-    }
+.hero-subtitle {
+  font-size: 1.35rem;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
 
-    .btn-large {
-        padding: 1rem 2.2rem;
-        font-size: 1.15rem;
-    }
+.hero-buttons {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
 
-    .hero-trust {
-        font-size: 0.95rem;
-        color: var(--gray-600);
-        margin-top: 1.5rem;
-    }
+/* Buttons */
 
-    /* Features */
-    .features {
-        padding: 6rem 1.5rem;
-        background: white;
-    }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.8rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
 
-    .section-header {
-        text-align: center;
-        max-width: 720px;
-        margin: 0 auto 4rem;
-    }
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
 
-    .section-header h2 {
-        font-size: 2.6rem;
-        margin-bottom: 1rem;
-    }
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
 
-    .section-header p {
-        font-size: 1.15rem;
-        color: var(--gray-600);
-    }
+.btn-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
 
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
 
-    .feature-card {
-        background: var(--gray-100);
-        padding: 2.2rem 1.8rem;
-        border-radius: 16px;
-        border: 1px solid var(--gray-200);
-        transition: all 0.25s ease;
-    }
+.btn-lg {
+  padding: 1.1rem 2.2rem;
+  font-size: 1.15rem;
+}
 
-    .feature-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        border-color: var(--primary);
-    }
+.btn-xl {
+  padding: 1.3rem 2.8rem;
+  font-size: 1.25rem;
+}
 
-    .feature-icon {
-        font-size: 3.2rem;
-        margin-bottom: 1.2rem;
-        display: block;
-    }
+/* Hero Mockup */
 
-    .feature-card h3 {
-        font-size: 1.45rem;
-        margin-bottom: 0.9rem;
-    }
+.hero-visual {
+  position: relative;
+}
 
-    /* Stats */
-    .stats {
-        padding: 5rem 1.5rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        text-align: center;
-    }
+.mockup-wrapper {
+  position: relative;
+  perspective: 1200px;
+}
 
-    .stats-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 4rem 6rem;
-        max-width: 1100px;
-        margin: 0 auto;
-    }
+.mockup-phone {
+  background: #111827;
+  border-radius: 36px;
+  padding: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  transform: rotateY(-15deg) rotateX(8deg);
+}
 
-    .stat-item {
-        flex: 1 1 200px;
-    }
+.mockup-screen {
+  background: #0f172a;
+  border-radius: 24px;
+  height: 520px;
+  overflow: hidden;
+  position: relative;
+}
 
-    .stat-number {
-        font-size: 3.8rem;
-        font-weight: 700;
-        color: var(--primary);
-        line-height: 1;
-    }
+.mockup-header {
+  background: #1e293b;
+  padding: 14px;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-align: center;
+}
 
-    .stat-label {
-        font-size: 1.1rem;
-        color: var(--gray-600);
-        margin-top: 0.6rem;
-    }
+.mockup-content {
+  padding: 2rem;
+  color: white;
+}
 
-    /* Final CTA */
-    .final-cta {
-        padding: 7rem 1.5rem 8rem;
-        text-align: center;
-        background: var(--primary);
-        color: white;
-        clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%);
-    }
+.mockup-stats div {
+  margin: 1.2rem 0;
+  font-size: 1.1rem;
+  padding: 0.8rem;
+  background: rgba(99, 102, 241, 0.12);
+  border-radius: 8px;
+}
 
-    .final-cta h2 {
-        font-size: 2.8rem;
-        margin-bottom: 1.2rem;
-    }
+/* ======================
+   FEATURES SECTION
+====================== */
 
-    .final-cta p {
-        font-size: 1.3rem;
-        opacity: 0.95;
-        margin-bottom: 2.5rem;
-    }
+.features-section {
+  padding: 7rem 0;
+  background: white;
+}
 
-    @media (max-width: 640px) {
-        .hero {
-            padding: 6rem 1rem 5rem;
-        }
-        .hero h1 {
-            font-size: 2.8rem;
-        }
-        .stats-grid {
-            gap: 3rem 2rem;
-        }
-    }
-    </style>
+.section-title-center {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 4.5rem;
+}
 
+.section-title-center h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+}
+
+.section-title-center p {
+  font-size: 1.2rem;
+  color: var(--gray-600);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.2rem;
+}
+
+/* Feature Card */
+
+.feature-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.feature-link:hover .feature-card {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary);
+}
+
+.feature-card {
+  background: var(--gray-50);
+  padding: 2.2rem 1.8rem;
+  border-radius: 16px;
+  border: 1px solid var(--gray-200);
+  transition: all 0.25s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1.4rem;
+  display: block;
+}
+
+.feature-card h3 {
+  font-size: 1.45rem;
+  margin-bottom: 1rem;
+}
+
+/* ======================
+   CTA SECTION
+====================== */
+
+.cta-section {
+  padding: 8rem 0;
+  background: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
+  color: white;
+  text-align: center;
+}
+
+.cta-container h2 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta-container p {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  margin-bottom: 2.5rem;
+}
+
+/* ======================
+   RESPONSIVE
+====================== */
+
+@media (max-width: 1024px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-right {
+    margin-top: 4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+}
+</style>
 {% endblock %}

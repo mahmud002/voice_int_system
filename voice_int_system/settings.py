@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'internal_check',
 ]
 
 # Redirects (we'll create these views soon)
