@@ -280,21 +280,23 @@
                 {% if result %}
                 <div class="result-section">
                     <h3 class="result-title">Similarity Result</h3>
-
+                    <p class="upload-label">{{result.file_name}}</p>
                     <div class="similarity-score">{{ result.score }}%</div>
 
                     <div class="similarity-bar">
-                        <div class="similarity-fill" style="width: '{{ result.score }}%'"></div>
+                        <div class="similarity-fill" style="width: {{ result.score }}%"></div>
                     </div>
 
                     <div class="interpretation 
-                        {% if result.score >= 75 %}high
-                        {% elif result.score >= 40 %}medium
+                        {% if result.score >= 85 %}high
+                        {% elif result.score >= 50 %}medium
                         {% else %}low{% endif %}">
-                        {% if result.score >= 75 %}
+                        {% if result.score >= 85 %}
                             Very high similarity — likely the same speaker
-                        {% elif result.score >= 40 %}
-                            Moderate similarity — possible same speaker
+                        {% elif result.score >= 70 %}
+                            High similarity — possible same speaker
+                        {% elif result.score >= 50 %}
+                            Moderate similarity — very low possible same speaker
                         {% else %}
                             Low similarity — probably different speakers
                         {% endif %}
