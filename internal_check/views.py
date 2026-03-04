@@ -5,6 +5,13 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from resemblyzer import VoiceEncoder, preprocess_wav
 
+
+
+#search_youtube
+def search_youtube(request):
+
+    return render(request, 'search_youtube.html') 
+
 # Function to compute similarity
 def your_similarity_function(path1, path2):
     encoder = VoiceEncoder()
