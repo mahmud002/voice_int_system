@@ -280,9 +280,17 @@
                 {% if result %}
                 <div class="result-section">
                     <h3 class="result-title">Similarity Result</h3>
-                    <p class="upload-label">{{result.file_name}}</p>
-                    <div class="similarity-score">{{ result.score }}%</div>
+<h4>Voice 1</h4>
+<audio controls>
+    <source src="{{ result.voice1_url }}" type="audio/wav">
+</audio>
 
+<h4>Voice 2</h4>
+<audio controls>
+    <source src="{{ result.voice2_url }}" type="audio/wav">
+</audio>
+                    <div class="similarity-score">{{ result.score }}%</div>
+                    
                     <div class="similarity-bar">
                         <div class="similarity-fill" style="width: {{ result.score }}%"></div>
                     </div>
