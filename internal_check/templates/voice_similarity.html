@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block title %}Voice Similarity Check - Voice Intelligence System{% endblock %}
@@ -219,6 +220,71 @@
             padding: 1.5rem;
         }
     }
+
+ .comparison-graph-container{
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.graph-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.graph-header h4{
+    font-size:20px;
+    font-weight:600;
+    color:#1e293b;
+}
+
+.graph-selector{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.graph-selector label{
+    font-size:13px;
+    font-weight:500;
+    color:#64748b;
+}
+
+.graph-selector select{
+    padding:8px 14px;
+    border-radius:8px;
+    border:1px solid #e2e8f0;
+    background:#f8fafc;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    transition:all 0.2s ease;
+}
+
+.graph-selector select:hover{
+    border-color:#6366f1;
+}
+
+.graph-selector select:focus{
+    outline:none;
+    border-color:#6366f1;
+    box-shadow:0 0 0 3px rgba(99,102,241,0.15);
+}
+
+.graph-display{
+    text-align:center;
+}
+
+.comparison-graph{
+    max-width:100%;
+    border-radius:10px;
+    border:1px solid #e2e8f0;
+    box-shadow:0 5px 15px rgba(0,0,0,0.06);
+}
 </style>
 {% endblock %}
 
@@ -247,8 +313,7 @@
                     {% for message in messages %}
                         <div class="alert 
                             {% if message.tags == 'success' %}alert-success{% endif %}
-                            {% if message.tags == 'error' or message.tags == 'danger' %}alert-error{% endif %}
-                        ">
+                            {% if message.tags == 'error' or message.tags == 'danger' %}alert-error{% endif %}">
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -276,21 +341,44 @@
                     <button type="submit" class="btn-check" id="checkBtn" disabled>Check Similarity</button>
                 </form>
 
-                <!-- Result area (shown after processing) -->
                 {% if result %}
                 <div class="result-section">
                     <h3 class="result-title">Similarity Result</h3>
-<h4>Voice 1</h4>
-<audio controls>
-    <source src="{{ result.voice1_url }}" type="audio/wav">
-</audio>
 
-<h4>Voice 2</h4>
-<audio controls>
-    <source src="{{ result.voice2_url }}" type="audio/wav">
-</audio>
-                    <div class="similarity-score">{{ result.score }}%</div>
-                    
+                    <h4>Voice 1</h4>
+                    <audio controls>
+                        <source src="{{ result.voice1_url }}" type="audio/wav">
+                    </audio>
+
+                    <h4>Voice 2</h4>
+                    <audio controls>
+                        <source src="{{ result.voice2_url }}" type="audio/wav">
+                    </audio>
+
+                    <div class="comparison-graph-container">
+
+                        <div class="graph-header">
+                            <h4>Voice Comparison Graph</h4>
+
+                            <div class="graph-selector">
+                                <label for="graphType">Graph Type</label>
+                                <select id="graphType">
+                                    <option value="line">Line Chart</option>
+                                    <option value="bar">Bar Chart</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="graph-display">
+                            <img id="lineGraph" src="{{ result.comparison_graph }}" class="comparison-graph">
+                            <img id="barGraph" src="{{ result.bar_chart }}" class="comparison-graph" style="display:none;">
+                            
+                        </div>
+
+                    </div>
+
+                    <div class="similarity-score mt-4">{{ result.score }}%</div>
+
                     <div class="similarity-bar">
                         <div class="similarity-fill" style="width: {{ result.score }}%"></div>
                     </div>
@@ -325,7 +413,30 @@
 </div>
 
 <script>
-// Enable/disable check button based on file selection
+const graphType = document.getElementById("graphType");
+const lineGraph = document.getElementById("lineGraph");
+const barGraph = document.getElementById("barGraph");
+
+
+graphType.addEventListener("change", function(){
+
+    if(this.value === "line"){
+        lineGraph.style.display = "block";
+        barGraph.style.display = "none";
+        heatmap.style.display = "none";
+    }
+
+    if(this.value === "bar"){
+        lineGraph.style.display = "none";
+        barGraph.style.display = "block";
+        heatmap.style.display = "none";
+    }
+    
+
+});
+</script>
+<script>
+// File input handling
 const voice1 = document.getElementById('voice1');
 const voice2 = document.getElementById('voice2');
 const checkBtn = document.getElementById('checkBtn');
@@ -340,11 +451,17 @@ voice1.addEventListener('change', () => {
     voice1Name.textContent = voice1.files[0]?.name || 'No file chosen';
     updateButton();
 });
-
 voice2.addEventListener('change', () => {
     voice2Name.textContent = voice2.files[0]?.name || 'No file chosen';
     updateButton();
 });
+
+// Delete temp files on page unload
+window.addEventListener("beforeunload", function () {
+    navigator.sendBeacon("/internal/delete_temp_files/");
+});
 </script>
+
+
 
 {% endblock %}
