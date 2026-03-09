@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'internal_check',
+    'search_yt',
 ]
 
 # Redirects (we'll create these views soon)

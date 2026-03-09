@@ -1,7 +1,6 @@
-
 {% extends 'base.html' %}
 
-{% block title %}Voice Similarity Check - Voice Intelligence System{% endblock %}
+{% block title %}Channel Voice Search - Voice Intelligence{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -285,6 +284,11 @@
     border:1px solid #e2e8f0;
     box-shadow:0 5px 15px rgba(0,0,0,0.06);
 }
+.progress-container { margin: 2rem 0; }
+.result-row { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+.high { color: #059669; font-weight: bold; }
+.medium { color: #d97706; }
+.low { color: #dc2626; }
 </style>
 {% endblock %}
 
@@ -292,176 +296,153 @@
 
 <div class="similarity-page">
     <div class="container">
-
         <div class="page-header">
-            <h1 class="page-title">Voice Similarity Check</h1>
+            <h1 class="page-title">Channel Voice Search</h1>
             <p class="page-subtitle">
-                Upload two voice samples to determine how similar they are.
-                The system compares speaker characteristics (not exact words).
+                Upload your reference voice and compare it against videos from any YouTube channel.
             </p>
         </div>
 
         <div class="card">
-
             <div class="card-header">
-                <h2 class="card-title">Compare Two Voices</h2>
+                <h2 class="card-title">Compare with YouTube Channel</h2>
             </div>
 
             <div class="card-body">
-
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert 
-                            {% if message.tags == 'success' %}alert-success{% endif %}
-                            {% if message.tags == 'error' or message.tags == 'danger' %}alert-error{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <form method="post" enctype="multipart/form-data" id="similarityForm">
+                <form id="channelForm" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <div class="upload-group">
-                        <label class="upload-label">Voice Sample 1</label>
-                        <label class="file-input-wrapper">
-                            <input type="file" name="voice1" accept="audio/video*" class="file-input" id="voice1" required>
-                            <div class="file-name" id="voice1-name">No file chosen</div>
-                        </label>
+                        <label class="upload-label">Reference Voice</label>
+                        <input type="file" name="reference_voice" accept="audio/*,video/*" id="refVoice" required>
+                        <div id="refName">No file chosen</div>
                     </div>
 
                     <div class="upload-group">
-                        <label class="upload-label">Voice Sample 2</label>
-                        <label class="file-input-wrapper">
-                            <input type="file" name="voice2" accept="audio/video*" class="file-input" id="voice2" required>
-                            <div class="file-name" id="voice2-name">No file chosen</div>
-                        </label>
+                        <label class="upload-label">YouTube Channel URL</label>
+                        <input type="url" name="channel_url" placeholder="https://www.youtube.com/@username" required>
                     </div>
 
-                    <button type="submit" class="btn-check" id="checkBtn" disabled>Check Similarity</button>
+                    <div class="upload-group">
+                        <label class="upload-label">Number of videos to analyze</label>
+                        <input type="number" name="count" value="10" min="1" max="100" required>
+                    </div>
+
+                    <button type="submit" class="btn-check" id="startBtn">Start Analysis</button>
                 </form>
 
-                {% if result %}
-                <div class="result-section">
-                    <h3 class="result-title">Similarity Result</h3>
-
-                    <h4>Voice 1</h4>
-                    <audio controls>
-                        <source src="{{ result.voice1_url }}" type="audio/wav">
-                    </audio>
-
-                    <h4>Voice 2</h4>
-                    <audio controls>
-                        <source src="{{ result.voice2_url }}" type="audio/wav">
-                    </audio>
-
-                    <div class="comparison-graph-container">
-
-                        <div class="graph-header">
-                            <h4>Voice Comparison Graph</h4>
-
-                            <div class="graph-selector">
-                                <label for="graphType">Graph Type</label>
-                                <select id="graphType">
-                                    <option value="line">Line Chart</option>
-                                    <option value="bar">Bar Chart</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="graph-display">
-                            <img id="lineGraph" src="{{ result.comparison_graph }}" class="comparison-graph">
-                            <img id="barGraph" src="{{ result.bar_chart }}" class="comparison-graph" style="display:none;">
-                            
-                        </div>
-
-                    </div>
-
-                    <div class="similarity-score mt-4">{{ result.score }}%</div>
-
-                    <div class="similarity-bar">
-                        <div class="similarity-fill" style="width: {{ result.score }}%"></div>
-                    </div>
-
-                    <div class="interpretation 
-                        {% if result.score >= 85 %}high
-                        {% elif result.score >= 50 %}medium
-                        {% else %}low{% endif %}">
-                        {% if result.score >= 85 %}
-                            Very high similarity — likely the same speaker
-                        {% elif result.score >= 70 %}
-                            High similarity — possible same speaker
-                        {% elif result.score >= 50 %}
-                            Moderate similarity — very low possible same speaker
-                        {% else %}
-                            Low similarity — probably different speakers
-                        {% endif %}
-                    </div>
-
-                    {% if result.message %}
-                    <div style="margin-top:1.5rem; text-align:center; color:var(--gray-600);">
-                        {{ result.message }}
-                    </div>
-                    {% endif %}
+                <div id="progress" class="progress-container" style="display:none;">
+                    <h3>Analyzing...</h3>
+                    <div id="status"></div>
                 </div>
-                {% endif %}
 
+                <div id="results" style="margin-top:2rem;"></div>
+
+                <div id="loadMoreSection" style="display:none; margin-top:2rem; text-align:center;">
+                    <input type="number" id="moreCount" value="10" min="1" max="50" style="width:80px;">
+                    <button id="loadMoreBtn" class="btn-check">Analyze More Videos</button>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <script>
-const graphType = document.getElementById("graphType");
-const lineGraph = document.getElementById("lineGraph");
-const barGraph = document.getElementById("barGraph");
-
-
-graphType.addEventListener("change", function(){
-
-    if(this.value === "line"){
-        lineGraph.style.display = "block";
-        barGraph.style.display = "none";
-        heatmap.style.display = "none";
-    }
-
-    if(this.value === "bar"){
-        lineGraph.style.display = "none";
-        barGraph.style.display = "block";
-        heatmap.style.display = "none";
-    }
-    
-
-});
-</script>
-<script>
-// File input handling
-const voice1 = document.getElementById('voice1');
-const voice2 = document.getElementById('voice2');
-const checkBtn = document.getElementById('checkBtn');
-const voice1Name = document.getElementById('voice1-name');
-const voice2Name = document.getElementById('voice2-name');
-
-function updateButton() {
-    checkBtn.disabled = !(voice1.files.length > 0 && voice2.files.length > 0);
+// CSRF helper
+function getCsrf() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
 }
 
-voice1.addEventListener('change', () => {
-    voice1Name.textContent = voice1.files[0]?.name || 'No file chosen';
-    updateButton();
+let currentStart = 0;
+let refFile = null;
+
+document.getElementById('refVoice').addEventListener('change', e => {
+    refFile = e.target.files[0];
+    document.getElementById('refName').textContent = refFile ? refFile.name : 'No file chosen';
 });
-voice2.addEventListener('change', () => {
-    voice2Name.textContent = voice2.files[0]?.name || 'No file chosen';
-    updateButton();
+
+document.getElementById('channelForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!refFile) return alert("Please select reference voice");
+
+    const formData = new FormData();
+    formData.append('reference_voice', refFile);
+    formData.append('channel_url', document.querySelector('[name="channel_url"]').value);
+    formData.append('count', document.querySelector('[name="count"]').value);
+    formData.append('csrfmiddlewaretoken', getCsrf());
+
+    document.getElementById('progress').style.display = 'block';
+    document.getElementById('startBtn').disabled = true;
+
+    await processBatch(formData, 0);
 });
+
+document.getElementById('loadMoreBtn').addEventListener('click', async () => {
+    const more = document.getElementById('moreCount').value;
+    const formData = new FormData();
+    formData.append('reference_voice', refFile);
+    formData.append('channel_url', document.querySelector('[name="channel_url"]').value);
+    formData.append('count', more);
+    formData.append('start_from', currentStart);
+    formData.append('csrfmiddlewaretoken', getCsrf());
+
+    await processBatch(formData, currentStart);
+});
+
+async function processBatch(formData, start) {
+    try {
+        const resp = await fetch('/search_yt/process-channel-comparison/', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (!resp.ok) throw new Error(await resp.text());
+
+        const data = await resp.json();
+
+        if (data.error) {
+            document.getElementById('status').innerHTML = `<div class="error-message">${data.error}</div>`;
+            return;
+        }
+
+        renderResults(data.results);
+
+        currentStart = data.next_start;
+
+        if (data.has_more) {
+            document.getElementById('loadMoreSection').style.display = 'block';
+        } else {
+            document.getElementById('loadMoreSection').style.display = 'none';
+        }
+
+    } catch (err) {
+        document.getElementById('status').innerHTML = `<div class="error-message">${err.message}</div>`;
+    }
+}
+
+function renderResults(results) {
+    const container = document.getElementById('results');
+    results.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'result-row';
+        const simClass = r.similarity >= 85 ? 'high' : r.similarity >= 50 ? 'medium' : 'low';
+        const simText = r.similarity ? `${r.similarity}%` : '—';
+
+        div.innerHTML = `
+            <strong>Video ${r.index}:</strong>
+            <a href="${r.video_url}" target="_blank">${r.title}</a><br>
+            Similarity: <span class="${simClass}">${simText}</span>
+            ${r.status === 'error' ? `<br><small style="color:red;">${r.message}</small>` : ''}
+        `;
+        container.appendChild(div);
+    });
+}
 
 // Delete temp files on page unload
 window.addEventListener("beforeunload", function () {
-    navigator.sendBeacon("/internal/delete_temp_files/");
+    navigator.sendBeacon("/search_yt/delete_temp_files/");
 });
 </script>
-
-
 
 {% endblock %}
