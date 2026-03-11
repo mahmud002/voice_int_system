@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Channel Voice Search - Voice Intelligence{% endblock %}
+{% block title %}
+Channel Voice Search - Voice Intelligence
+{% endblock %}
+
 
 {% block extra_css %}
 <style>
-/* ================= RESULTS LAYOUT ================= */
+
+/* ================= RESULTS ================= */
+
 #results {
     display: flex;
     flex-direction: column;
@@ -17,11 +22,14 @@
     padding: 20px;
     border-radius: 12px;
     border: 1px solid #e6e6e6;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 0 4px 14px rgba(0,0,0,0.05);
 }
 
-.video-section { flex: 1; }
+.video-section {
+    flex: 1;
+}
+
 .analysis-section {
     flex: 1;
     display: flex;
@@ -29,17 +37,32 @@
     gap: 10px;
 }
 
-.video-title { font-size: 18px; }
+.video-title {
+    font-size: 18px;
+}
+
 .video-link {
     text-decoration: none;
     color: #2563eb;
     font-weight: 500;
 }
-.video-link:hover { text-decoration: underline; }
+
+.video-link:hover {
+    text-decoration: underline;
+}
 
 /* ================= VIDEO PREVIEW ================= */
-.video-preview { position: relative; max-width: 420px; }
-.video-thumb { width: 100%; border-radius: 10px; }
+
+.video-preview {
+    position: relative;
+    max-width: 420px;
+}
+
+.video-thumb {
+    width: 100%;
+    border-radius: 10px;
+}
+
 .watch-btn {
     position: absolute;
     bottom: 10px;
@@ -51,48 +74,95 @@
     text-decoration: none;
     font-weight: 600;
 }
-.watch-btn:hover { background: #cc0000; }
+
+.watch-btn:hover {
+    background: #cc0000;
+}
 
 /* ================= SIMILARITY ================= */
-.similarity-block { margin-top: 10px; }
+
+.similarity-block {
+    margin-top: 10px;
+}
+
 .similarity-label {
     display: flex;
     justify-content: space-between;
     font-size: 14px;
     margin-bottom: 6px;
 }
+
 .similarity-bar {
     height: 10px;
     background: #eee;
     border-radius: 6px;
     overflow: hidden;
 }
+
 .similarity-fill {
     height: 100%;
     border-radius: 6px;
     transition: width 0.8s ease;
 }
 
-.similarity-value.high { color: #16a34a; font-weight: 600; }
-.similarity-value.medium { color: #f59e0b; font-weight: 600; }
-.similarity-value.low { color: #ef4444; font-weight: 600; }
+.similarity-value.high {
+    color: #16a34a;
+    font-weight: 600;
+}
 
-.similarity-fill.high { background: #16a34a; }
-.similarity-fill.medium { background: #f59e0b; }
-.similarity-fill.low { background: #ef4444; }
+.similarity-value.medium {
+    color: #f59e0b;
+    font-weight: 600;
+}
 
-.verdict { margin-top: 12px; font-weight: 600; }
+.similarity-value.low {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.similarity-fill.high {
+    background: #16a34a;
+}
+
+.similarity-fill.medium {
+    background: #f59e0b;
+}
+
+.similarity-fill.low {
+    background: #ef4444;
+}
+
+.verdict {
+    margin-top: 12px;
+    font-weight: 600;
+}
+
 .verdict.high { color: #16a34a; }
 .verdict.medium { color: #f59e0b; }
 .verdict.low { color: #ef4444; }
 
-.error-msg { margin-top: 8px; color: red; font-size: 13px; }
+/* ================= PAGE ================= */
 
-/* ================= PAGE STYLE ================= */
-.similarity-page { padding: 4rem 0 6rem; background: linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%); }
-.page-header { text-align: center; margin-bottom: 3.5rem; }
-.page-title { font-size: 2.25rem; font-weight: 700; }
-.page-subtitle { color: #64748b; }
+.similarity-page {
+    padding: 4rem 0 6rem;
+    background: linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    color: #64748b;
+}
+
+/* ================= CARD ================= */
 
 .card {
     background: white;
@@ -102,19 +172,39 @@
     max-width: 720px;
     margin: auto;
 }
-.card-header { padding: 1.5rem 2rem; border-bottom: 1px solid #e2e8f0; }
-.card-body { padding: 2rem; }
 
-/* ================= INPUT ================= */
-.upload-group { margin-bottom: 2rem; }
-.upload-label { display: block; font-weight: 500; margin-bottom: 0.75rem; }
+.card-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* ================= FORM ================= */
+
+.upload-group {
+    margin-bottom: 2rem;
+}
+
+.upload-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
 .file-input {
     width: 100%;
     padding: 1rem;
     border: 2px dashed #cbd5f5;
     border-radius: 8px;
 }
-.file-name { margin-top: 0.5rem; font-size: 0.9rem; }
+
+.file-name {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
 
 .btn-check {
     width: 100%;
@@ -126,196 +216,450 @@
     border-radius: 8px;
     cursor: pointer;
 }
-.btn-check:hover { background: #4f46e5; }
 
-.progress-container { margin-top: 2rem; }
+.btn-check:hover {
+    background: #4f46e5;
+}
+
+.more-box {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: white;
+}
+/* Sound Wave */
+
+.analyzing-wrapper{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--primary-dark);
+}
+
+.wave{
+    display:flex;
+    align-items:center;
+    gap:3px;
+}
+
+.wave span{
+    width:3px;
+    height:16px;
+    background:linear-gradient(
+        to top,
+        var(--primary),
+        var(--primary-dark)
+    );
+    border-radius:2px;
+    animation:voiceWave 1.2s infinite ease-in-out;
+}
+
+/* Different bars */
+
+.wave span:nth-child(1){height:8px;animation-delay:.1s}
+.wave span:nth-child(2){height:16px;animation-delay:.2s}
+.wave span:nth-child(3){height:12px;animation-delay:.3s}
+.wave span:nth-child(4){height:6px;animation-delay:.4s}
+
+.btn-check:disabled{
+    background:#94a3b8;
+    cursor:not-allowed;
+}
 </style>
 {% endblock %}
 
+
+
 {% block content %}
+
 <div class="similarity-page">
     <div class="container">
 
-        <!-- PAGE HEADER -->
         <div class="page-header">
             <h1 class="page-title">Channel Voice Search</h1>
-            <p class="page-subtitle">Upload reference voice and analyze YouTube channel videos.</p>
+            <p class="page-subtitle">
+                Upload reference voice and analyze YouTube channel videos.
+            </p>
         </div>
 
-        <!-- UPLOAD CARD -->
+
         <div class="card">
-            
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert 
-                            {% if message.tags == 'success' %}alert-success{% endif %}
-                            {% if message.tags == 'error' or message.tags == 'danger' %}alert-error{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            <div class="card-header"><h2>Compare with YouTube Channel</h2></div>
+
+            <div class="card-header">
+                <h2>Compare with YouTube Channel</h2>
+            </div>
+
+
             <div class="card-body">
+
                 <form id="channelForm" enctype="multipart/form-data">
                     {% csrf_token %}
+
                     <div class="upload-group">
-                        <label class="upload-label">Reference Voice</label>
-                        <input type="file" name="reference_voice" accept="audio/*,video/*" id="refVoice" class="file-input" required>
-                        <div id="refName" class="file-name">No file chosen</div>
-                    </div>
-                    <div class="upload-group">
-                        <label class="upload-label">YouTube Channel URL</label>
-                        <input type="url" name="channel_url" class="file-input" required>
-                    </div>
-                    <div class="upload-group">
-                        <label class="upload-label">Number of videos</label>
-                        <input type="number" name="count" class="file-input" value="10" min="1" max="100">
-                    </div>
-                    <button type="submit" class="btn-check" id="startBtn">Start Analysis</button>
+                    <label class="upload-label">Reference Voice</label>
+
+                    <input
+                    type="file"
+                    name="reference_voice"
+                    accept="audio/*,video/*"
+                    id="refVoice"
+                    class="file-input"
+                    required
+                    >
+
+                    <div id="refName" class="file-name">
+                    No file chosen
+                </div>
+            </div>
+
+
+            <div class="upload-group">
+                <label class="upload-label">YouTube Channel URL</label>
+
+                    <input
+                    type="url"
+                    name="channel_url"
+                    class="file-input"
+                    required
+                    >
+            </div>
+
+
+            <div class="upload-group">
+                <label class="upload-label">Number of videos</label>
+
+                    <input
+                    type="number"
+                    name="count"
+                    class="file-input"
+                    value="10"
+                    min="1"
+                    max="100"
+                    >
+            </div>
+
+                    <button type="submit" class="btn-check">
+                        Start Analysis
+                    </button>
+
                 </form>
 
-                <div id="progress" class="progress-container" style="display:none;">
-                    <h3>Analyzing...</h3>
-                    <div id="status"></div>
+
+                <div id="results" style="margin-top:2rem;">
+
+                    <div id="loadingIndicator" class="analyzing-wrapper" style="display:none;">
+                        <span class="wave">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+
+                        <span class="analyzing">Analyzing</span>
+
+                        <span class="wave">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </div>
+
                 </div>
 
-                <div id="results" style="margin-top:2rem;"></div>
-            </div>
-            <!-- ================= SEARCH MORE ================= -->
-            <div id="searchMoreContainer" style="display:none; margin-top:2rem;">
-                <h3>Search More Videos</h3>
-                <form id="searchMoreForm">
-                    <div class="upload-group">
-                        <label class="upload-label">Number of videos</label>
-                        <input type="number" name="count_more" class="file-input" value="10" min="1" max="100">
-                    </div>
-                    <button type="submit" class="btn-check">Search More</button>
-                </form>
+
+                <div id="moreSearchBox" class="more-box" style="display:none">
+
+                <h3>Analyze More Videos</h3>
+
+                    <input
+                        type="number"
+                        id="moreCount"
+                        class="file-input"
+                        value="5"
+                        min="1"
+                        max="50"
+                    >
+
+                    <button
+                        id="moreBtn"
+                        class="btn-check"
+                        style="margin-top:10px"
+                    >
+                    Analyze More
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
-    /* ================= SEARCH MORE ================= */
-const searchMoreContainer = document.getElementById('searchMoreContainer');
-const searchMoreForm = document.getElementById('searchMoreForm');
 
-function showSearchMore() {
-    searchMoreContainer.style.display = 'block';
-}
+/* ================= CSRF ================= */
 
-/* Handle Search More submit */
-searchMoreForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const countMore = document.querySelector('[name="count_more"]').value;
-    if (!refFile) return alert("Reference voice missing!");
-
-    const formData = new FormData();
-    formData.append('reference_voice', refFile);
-    formData.append('channel_url', document.querySelector('[name="channel_url"]').value);
-    formData.append('count', countMore); // new number of videos
-    formData.append('csrfmiddlewaretoken', getCsrf());
-
-    document.getElementById('progress').style.display = 'block';
-
-    const resp = await fetch('/search_yt/process-channel-comparison/', {
-        method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    });
-
-    const data = await resp.json();
-    renderResults(data.results);
-});
-/* ================= CSRF Helper ================= */
 function getCsrf() {
     return document.querySelector('[name=csrfmiddlewaretoken]').value;
 }
 
-/* ================= FILE HANDLING ================= */
+
+/* ================= GLOBAL STATE ================= */
+
 let refFile = null;
+let analyzedCount = 0;
+let channelUrl = "";
+
+
+/* ================= FILE INPUT ================= */
+
 document.getElementById('refVoice').addEventListener('change', (e) => {
+
     refFile = e.target.files[0];
-    document.getElementById('refName').textContent = refFile ? refFile.name : "No file chosen";
+
+    document.getElementById('refName').textContent =
+        refFile ? refFile.name : "No file chosen";
+
 });
 
-/* ================= FORM SUBMIT ================= */
+
+/* ================= INITIAL ANALYSIS ================= */
+function showLoading(){
+    document.getElementById("loadingIndicator").style.display = "flex";
+}
+
+function hideLoading(){
+    document.getElementById("loadingIndicator").style.display = "none";
+}
+
 document.getElementById('channelForm').addEventListener('submit', async (e) => {
+
     e.preventDefault();
-    if (!refFile) return alert("Select reference voice");
+
+    const btn = document.querySelector(".btn-check");
+    btn.disabled = true;
+
+    showLoading();
+
+    if (!refFile) {
+        alert("Select reference voice");
+        btn.disabled = false;
+        hideLoading();
+        return;
+    }
+
+    analyzedCount = parseInt(
+        document.querySelector('[name="count"]').value
+    );
+
+    channelUrl =
+        document.querySelector('[name="channel_url"]').value;
 
     const formData = new FormData();
+
     formData.append('reference_voice', refFile);
-    formData.append('channel_url', document.querySelector('[name="channel_url"]').value);
-    formData.append('count', document.querySelector('[name="count"]').value);
+    formData.append('channel_url', channelUrl);
+    formData.append('count', analyzedCount);
+    formData.append('start_from', 0);
     formData.append('csrfmiddlewaretoken', getCsrf());
 
-    document.getElementById('progress').style.display = 'block';
-
-    const resp = await fetch('/search_yt/process-channel-comparison/', {
-        method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    });
+    const resp = await fetch(
+        '/search_yt/process-channel-comparison/',
+        {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }
+    );
 
     const data = await resp.json();
+
+    hideLoading();
+
+    btn.disabled = false;
+
     renderResults(data.results);
+
+    document.getElementById('moreSearchBox').style.display = 'block';
+
 });
 
-/* ================= YOUTUBE UTILS ================= */
+
+/* ================= LOAD MORE ================= */
+
+document.getElementById('moreBtn').addEventListener('click', async () => {
+
+    const btn = document.getElementById('moreBtn');
+
+    btn.disabled = true;
+
+
+    const more = parseInt(
+        document.getElementById('moreCount').value
+    );
+
+    const formData = new FormData();
+
+    formData.append('reference_voice', refFile);
+    formData.append('channel_url', channelUrl);
+    formData.append('count', more);
+    formData.append('start_from', analyzedCount);
+    formData.append('csrfmiddlewaretoken', getCsrf());
+
+    const resp = await fetch(
+        '/search_yt/process-channel-comparison/',
+        {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }
+    );
+
+    const data = await resp.json();
+
+
+    btn.disabled = false;
+
+    appendResults(data.results);
+
+    analyzedCount += more;
+
+});
+
+
+/* ================= UTIL ================= */
+
 function getVideoId(url) {
-    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
+
+    const regex =
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
+
     const match = url.match(regex);
+
     return match ? match[1] : null;
 }
 
-/* ================= RENDER RESULTS ================= */
+
+/* ================= CARD CREATOR ================= */
+
+function createCard(r) {
+
+    const similarity = r.similarity || 0;
+
+    const simClass =
+        similarity >= 85 ? 'high'
+        : similarity >= 50 ? 'medium'
+        : 'low';
+
+    const verdict =
+        similarity >= 85 ? 'Same Voice Likely'
+        : similarity >= 50 ? 'Possible Match'
+        : 'Different Voice';
+
+    const videoId = getVideoId(r.video_url);
+
+    const div = document.createElement('div');
+
+    div.className = 'investigation-card';
+
+    div.innerHTML = `
+
+<div class="video-section">
+
+${videoId ? `
+<div class="video-preview">
+
+<img
+class="video-thumb"
+src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg"
+>
+
+<a
+class="watch-btn"
+href="${r.video_url}"
+target="_blank"
+>
+▶ Watch on YouTube
+</a>
+
+</div>
+` : ''}
+
+</div>
+
+<div class="analysis-section">
+
+<div class="video-title">
+<strong>Video ${r.index}</strong>
+</div>
+
+<a
+class="video-link"
+href="${r.video_url}"
+target="_blank"
+>
+${r.title}
+</a>
+
+<div class="similarity-block">
+
+<div class="similarity-label">
+
+Voice Similarity
+
+<span class="similarity-value ${simClass}">
+${similarity ? similarity + '%' : '—'}
+</span>
+
+</div>
+
+<div class="similarity-bar">
+
+<div
+class="similarity-fill ${simClass}"
+style="width:${similarity}%"
+></div>
+
+</div>
+
+</div>
+
+<div class="verdict ${simClass}">
+${verdict}
+</div>
+
+</div>
+`;
+
+    return div;
+}
+
+
+/* ================= RENDER ================= */
+
 function renderResults(results) {
+
     const container = document.getElementById('results');
-    container.innerHTML = "";
+
+    container.innerHTML = '';
 
     results.forEach(r => {
-        const similarity = r.similarity || 0;
-        const simClass = similarity >= 85 ? 'high' : similarity >= 50 ? 'medium' : 'low';
-        const verdict = similarity >= 85 ? 'Same Voice Likely' : similarity >= 50 ? 'Possible Match' : 'Different Voice';
-        const videoId = getVideoId(r.video_url);
-
-        const div = document.createElement('div');
-        div.className = 'investigation-card';
-
-        div.innerHTML = `
-            <div class="video-section">
-                ${videoId ? `
-                <div class="video-preview">
-                    <img class="video-thumb" src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg">
-                    <a class="watch-btn" href="${r.video_url}" target="_blank">▶ Watch on YouTube</a>
-                </div>` : ''}
-            </div>
-
-            <div class="analysis-section">
-                <div class="video-title"><strong>Video ${r.index}</strong></div>
-                <a class="video-link" href="${r.video_url}" target="_blank">${r.title}</a>
-
-                <div class="similarity-block">
-                    <div class="similarity-label">
-                        Voice Similarity
-                        <span class="similarity-value ${simClass}">${similarity ? similarity+'%' : '—'}</span>
-                    </div>
-                    <div class="similarity-bar">
-                        <div class="similarity-fill ${simClass}" style="width:${similarity}%"></div>
-                    </div>
-                </div>
-
-                <div class="verdict ${simClass}">${verdict}</div>
-            </div>
-        `;
-
-        container.appendChild(div);
+        container.appendChild(createCard(r));
     });
-    showSearchMore();
+
 }
+
+function appendResults(results) {
+
+    const container = document.getElementById('results');
+
+    results.forEach(r => {
+        container.appendChild(createCard(r));
+    });
+
+}
+
 </script>
 
 {% endblock %}
