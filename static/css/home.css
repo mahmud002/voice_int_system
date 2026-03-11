@@ -91,14 +91,55 @@ body {
 }
 
 .logo {
-  font-size: 1.65rem;
-  font-weight: 800;
-  color: var(--primary);
-  text-decoration: none;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Poppins", sans-serif;
 }
 
 .logo span {
-  color: var(--primary-dark);
+    color: var(--primary-dark);
+}
+
+/* Sound Wave Bars */
+
+.sound-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 18px;
+}
+
+.sound-bars span {
+    width: 3px;
+    background: linear-gradient(to top, var(--primary), var(--primary-dark));
+    border-radius: 2px;
+    animation: soundWave 1.2s infinite ease-in-out;
+}
+
+/* Different heights for bars */
+
+.sound-bars span:nth-child(1) { height: 6px; animation-delay: 0s; }
+.sound-bars span:nth-child(2) { height: 12px; animation-delay: .2s; }
+.sound-bars span:nth-child(3) { height: 18px; animation-delay: .4s; }
+.sound-bars span:nth-child(4) { height: 12px; animation-delay: .6s; }
+.sound-bars span:nth-child(5) { height: 6px; animation-delay: .8s; }
+
+/* Animation */
+
+@keyframes soundWave {
+    0%,100% {
+        transform: scaleY(.6);
+        opacity: .7;
+    }
+    50% {
+        transform: scaleY(1.4);
+        opacity: 1;
+    }
 }
 
 .nav-menu {

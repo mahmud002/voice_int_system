@@ -4,330 +4,173 @@
 
 {% block extra_css %}
 <style>
-    .similarity-page {
-        padding: 4rem 0 6rem;
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    }
+/* ================= RESULTS LAYOUT ================= */
+#results {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
 
-    [data-theme="dark"] .similarity-page {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    }
+.investigation-card {
+    display: flex;
+    gap: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
 
-    .page-header {
-        text-align: center;
-        margin-bottom: 3.5rem;
-    }
+.video-section { flex: 1; }
+.analysis-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .page-title {
-        font-size: 2.25rem;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 0.75rem;
-    }
+.video-title { font-size: 18px; }
+.video-link {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 500;
+}
+.video-link:hover { text-decoration: underline; }
 
-    .page-subtitle {
-        color: var(--gray-600);
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto;
-    }
+/* ================= VIDEO PREVIEW ================= */
+.video-preview { position: relative; max-width: 420px; }
+.video-thumb { width: 100%; border-radius: 10px; }
+.watch-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: #ff0000;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.watch-btn:hover { background: #cc0000; }
 
-    .card {
-        background: white;
-        border-radius: 12px;
-        box-shadow: var(--shadow-md);
-        border: 1px solid var(--gray-200);
-        overflow: hidden;
-        max-width: 720px;
-        margin: 0 auto;
-    }
+/* ================= SIMILARITY ================= */
+.similarity-block { margin-top: 10px; }
+.similarity-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.similarity-bar {
+    height: 10px;
+    background: #eee;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.similarity-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease;
+}
 
-    [data-theme="dark"] .card {
-        background: #1e293b;
-        border-color: var(--gray-600);
-    }
+.similarity-value.high { color: #16a34a; font-weight: 600; }
+.similarity-value.medium { color: #f59e0b; font-weight: 600; }
+.similarity-value.low { color: #ef4444; font-weight: 600; }
 
-    .card-header {
-        padding: 1.5rem 2rem;
-        background: rgba(99, 102, 241, 0.04);
-        border-bottom: 1px solid var(--gray-200);
-    }
+.similarity-fill.high { background: #16a34a; }
+.similarity-fill.medium { background: #f59e0b; }
+.similarity-fill.low { background: #ef4444; }
 
-    [data-theme="dark"] .card-header {
-        background: rgba(99, 102, 241, 0.08);
-        border-bottom-color: var(--gray-600);
-    }
+.verdict { margin-top: 12px; font-weight: 600; }
+.verdict.high { color: #16a34a; }
+.verdict.medium { color: #f59e0b; }
+.verdict.low { color: #ef4444; }
 
-    .card-title {
-        font-size: 1.35rem;
-        font-weight: 600;
-        margin: 0;
-        color: var(--primary);
-    }
+.error-msg { margin-top: 8px; color: red; font-size: 13px; }
 
-    .card-body {
-        padding: 2rem;
-    }
+/* ================= PAGE STYLE ================= */
+.similarity-page { padding: 4rem 0 6rem; background: linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%); }
+.page-header { text-align: center; margin-bottom: 3.5rem; }
+.page-title { font-size: 2.25rem; font-weight: 700; }
+.page-subtitle { color: #64748b; }
 
-    .upload-group {
-        margin-bottom: 2rem;
-    }
-
-    .upload-label {
-        display: block;
-        font-weight: 500;
-        margin-bottom: 0.75rem;
-        color: var(--gray-700);
-    }
-
-    [data-theme="dark"] .upload-label {
-        color: var(--gray-300);
-    }
-
-    .file-input-wrapper {
-        position: relative;
-    }
-
-    .file-input {
-        width: 100%;
-        padding: 1rem;
-        border: 2px dashed var(--gray-300);
-        border-radius: 8px;
-        background: var(--gray-50);
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-
-    .file-input:hover {
-        border-color: var(--primary);
-        background: rgba(99, 102, 241, 0.05);
-    }
-
-    [data-theme="dark"] .file-input {
-        background: #334155;
-        border-color: #475569;
-    }
-
-    [data-theme="dark"] .file-input:hover {
-        border-color: var(--primary);
-        background: rgba(99, 102, 241, 0.12);
-    }
-
-    .file-name {
-        margin-top: 0.75rem;
-        font-size: 0.95rem;
-        color: var(--gray-600);
-        word-break: break-all;
-    }
-
-    .btn-check {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1.1rem;
-        font-weight: 600;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        margin-top: 1.5rem;
-    }
-
-    .btn-check:hover {
-        background: var(--primary-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
-    }
-
-    .btn-check:disabled {
-        background: #cbd5e1;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
-
-    .result-section {
-        margin-top: 2.5rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--gray-200);
-    }
-
-    [data-theme="dark"] .result-section {
-        border-top-color: var(--gray-600);
-    }
-
-    .result-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 1.25rem;
-        color: var(--gray-800);
-    }
-
-    .similarity-score {
-        font-size: 3.5rem;
-        font-weight: 800;
-        text-align: center;
-        margin: 1rem 0;
-        color: var(--primary);
-    }
-
-    .similarity-bar {
-        height: 12px;
-        background: var(--gray-200);
-        border-radius: 6px;
-        overflow: hidden;
-        margin: 1.5rem 0;
-    }
-
-    .similarity-fill {
-        height: 100%;
-        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
-        transition: width 1s ease;
-    }
-
-    .interpretation {
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin-top: 1rem;
-    }
-
-    .interpretation.high   { color: #059669; }
-    .interpretation.medium { color: #d97706; }
-    .interpretation.low    { color: #dc2626; }
-
-    .error-message {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #991b1b;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        margin: 1.5rem 0;
-        text-align: center;
-    }
-
-    @media (max-width: 640px) {
-        .similarity-page {
-            padding: 2.5rem 0 4rem;
-        }
-        .page-title {
-            font-size: 1.85rem;
-        }
-        .card-body {
-            padding: 1.5rem;
-        }
-    }
-
- .comparison-graph-container{
-    margin-top: 30px;
-    padding: 25px;
-    border-radius: 14px;
-    background: #ffffff;
+.card {
+    background: white;
+    border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+    max-width: 720px;
+    margin: auto;
 }
+.card-header { padding: 1.5rem 2rem; border-bottom: 1px solid #e2e8f0; }
+.card-body { padding: 2rem; }
 
-.graph-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+/* ================= INPUT ================= */
+.upload-group { margin-bottom: 2rem; }
+.upload-label { display: block; font-weight: 500; margin-bottom: 0.75rem; }
+.file-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px dashed #cbd5f5;
+    border-radius: 8px;
 }
+.file-name { margin-top: 0.5rem; font-size: 0.9rem; }
 
-.graph-header h4{
-    font-size:20px;
-    font-weight:600;
-    color:#1e293b;
+.btn-check {
+    width: 100%;
+    padding: 1rem;
+    font-weight: 600;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
+.btn-check:hover { background: #4f46e5; }
 
-.graph-selector{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
-.graph-selector label{
-    font-size:13px;
-    font-weight:500;
-    color:#64748b;
-}
-
-.graph-selector select{
-    padding:8px 14px;
-    border-radius:8px;
-    border:1px solid #e2e8f0;
-    background:#f8fafc;
-    font-size:14px;
-    font-weight:500;
-    cursor:pointer;
-    transition:all 0.2s ease;
-}
-
-.graph-selector select:hover{
-    border-color:#6366f1;
-}
-
-.graph-selector select:focus{
-    outline:none;
-    border-color:#6366f1;
-    box-shadow:0 0 0 3px rgba(99,102,241,0.15);
-}
-
-.graph-display{
-    text-align:center;
-}
-
-.comparison-graph{
-    max-width:100%;
-    border-radius:10px;
-    border:1px solid #e2e8f0;
-    box-shadow:0 5px 15px rgba(0,0,0,0.06);
-}
-.progress-container { margin: 2rem 0; }
-.result-row { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
-.high { color: #059669; font-weight: bold; }
-.medium { color: #d97706; }
-.low { color: #dc2626; }
+.progress-container { margin-top: 2rem; }
 </style>
 {% endblock %}
 
 {% block content %}
-
 <div class="similarity-page">
     <div class="container">
+
+        <!-- PAGE HEADER -->
         <div class="page-header">
             <h1 class="page-title">Channel Voice Search</h1>
-            <p class="page-subtitle">
-                Upload your reference voice and compare it against videos from any YouTube channel.
-            </p>
+            <p class="page-subtitle">Upload reference voice and analyze YouTube channel videos.</p>
         </div>
 
+        <!-- UPLOAD CARD -->
         <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">Compare with YouTube Channel</h2>
-            </div>
-
+            
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert 
+                            {% if message.tags == 'success' %}alert-success{% endif %}
+                            {% if message.tags == 'error' or message.tags == 'danger' %}alert-error{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            <div class="card-header"><h2>Compare with YouTube Channel</h2></div>
             <div class="card-body">
                 <form id="channelForm" enctype="multipart/form-data">
                     {% csrf_token %}
-
                     <div class="upload-group">
                         <label class="upload-label">Reference Voice</label>
-                        <input type="file" name="reference_voice" accept="audio/*,video/*" id="refVoice" required>
-                        <div id="refName">No file chosen</div>
+                        <input type="file" name="reference_voice" accept="audio/*,video/*" id="refVoice" class="file-input" required>
+                        <div id="refName" class="file-name">No file chosen</div>
                     </div>
-
                     <div class="upload-group">
                         <label class="upload-label">YouTube Channel URL</label>
-                        <input type="url" name="channel_url" placeholder="https://www.youtube.com/@username" required>
+                        <input type="url" name="channel_url" class="file-input" required>
                     </div>
-
                     <div class="upload-group">
-                        <label class="upload-label">Number of videos to analyze</label>
-                        <input type="number" name="count" value="10" min="1" max="100" required>
+                        <label class="upload-label">Number of videos</label>
+                        <input type="number" name="count" class="file-input" value="10" min="1" max="100">
                     </div>
-
                     <button type="submit" class="btn-check" id="startBtn">Start Analysis</button>
                 </form>
 
@@ -337,33 +180,71 @@
                 </div>
 
                 <div id="results" style="margin-top:2rem;"></div>
-
-                <div id="loadMoreSection" style="display:none; margin-top:2rem; text-align:center;">
-                    <input type="number" id="moreCount" value="10" min="1" max="50" style="width:80px;">
-                    <button id="loadMoreBtn" class="btn-check">Analyze More Videos</button>
-                </div>
+            </div>
+            <!-- ================= SEARCH MORE ================= -->
+            <div id="searchMoreContainer" style="display:none; margin-top:2rem;">
+                <h3>Search More Videos</h3>
+                <form id="searchMoreForm">
+                    <div class="upload-group">
+                        <label class="upload-label">Number of videos</label>
+                        <input type="number" name="count_more" class="file-input" value="10" min="1" max="100">
+                    </div>
+                    <button type="submit" class="btn-check">Search More</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// CSRF helper
+    /* ================= SEARCH MORE ================= */
+const searchMoreContainer = document.getElementById('searchMoreContainer');
+const searchMoreForm = document.getElementById('searchMoreForm');
+
+function showSearchMore() {
+    searchMoreContainer.style.display = 'block';
+}
+
+/* Handle Search More submit */
+searchMoreForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const countMore = document.querySelector('[name="count_more"]').value;
+    if (!refFile) return alert("Reference voice missing!");
+
+    const formData = new FormData();
+    formData.append('reference_voice', refFile);
+    formData.append('channel_url', document.querySelector('[name="channel_url"]').value);
+    formData.append('count', countMore); // new number of videos
+    formData.append('csrfmiddlewaretoken', getCsrf());
+
+    document.getElementById('progress').style.display = 'block';
+
+    const resp = await fetch('/search_yt/process-channel-comparison/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+
+    const data = await resp.json();
+    renderResults(data.results);
+});
+/* ================= CSRF Helper ================= */
 function getCsrf() {
     return document.querySelector('[name=csrfmiddlewaretoken]').value;
 }
 
-let currentStart = 0;
+/* ================= FILE HANDLING ================= */
 let refFile = null;
-
-document.getElementById('refVoice').addEventListener('change', e => {
+document.getElementById('refVoice').addEventListener('change', (e) => {
     refFile = e.target.files[0];
-    document.getElementById('refName').textContent = refFile ? refFile.name : 'No file chosen';
+    document.getElementById('refName').textContent = refFile ? refFile.name : "No file chosen";
 });
 
-document.getElementById('channelForm').addEventListener('submit', async e => {
+/* ================= FORM SUBMIT ================= */
+document.getElementById('channelForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!refFile) return alert("Please select reference voice");
+    if (!refFile) return alert("Select reference voice");
 
     const formData = new FormData();
     formData.append('reference_voice', refFile);
@@ -372,77 +253,69 @@ document.getElementById('channelForm').addEventListener('submit', async e => {
     formData.append('csrfmiddlewaretoken', getCsrf());
 
     document.getElementById('progress').style.display = 'block';
-    document.getElementById('startBtn').disabled = true;
 
-    await processBatch(formData, 0);
+    const resp = await fetch('/search_yt/process-channel-comparison/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+
+    const data = await resp.json();
+    renderResults(data.results);
 });
 
-document.getElementById('loadMoreBtn').addEventListener('click', async () => {
-    const more = document.getElementById('moreCount').value;
-    const formData = new FormData();
-    formData.append('reference_voice', refFile);
-    formData.append('channel_url', document.querySelector('[name="channel_url"]').value);
-    formData.append('count', more);
-    formData.append('start_from', currentStart);
-    formData.append('csrfmiddlewaretoken', getCsrf());
-
-    await processBatch(formData, currentStart);
-});
-
-async function processBatch(formData, start) {
-    try {
-        const resp = await fetch('/search_yt/process-channel-comparison/', {
-            method: 'POST',
-            body: formData,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-
-        if (!resp.ok) throw new Error(await resp.text());
-
-        const data = await resp.json();
-
-        if (data.error) {
-            document.getElementById('status').innerHTML = `<div class="error-message">${data.error}</div>`;
-            return;
-        }
-
-        renderResults(data.results);
-
-        currentStart = data.next_start;
-
-        if (data.has_more) {
-            document.getElementById('loadMoreSection').style.display = 'block';
-        } else {
-            document.getElementById('loadMoreSection').style.display = 'none';
-        }
-
-    } catch (err) {
-        document.getElementById('status').innerHTML = `<div class="error-message">${err.message}</div>`;
-    }
+/* ================= YOUTUBE UTILS ================= */
+function getVideoId(url) {
+    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
 }
 
+/* ================= RENDER RESULTS ================= */
 function renderResults(results) {
     const container = document.getElementById('results');
+    container.innerHTML = "";
+
     results.forEach(r => {
+        const similarity = r.similarity || 0;
+        const simClass = similarity >= 85 ? 'high' : similarity >= 50 ? 'medium' : 'low';
+        const verdict = similarity >= 85 ? 'Same Voice Likely' : similarity >= 50 ? 'Possible Match' : 'Different Voice';
+        const videoId = getVideoId(r.video_url);
+
         const div = document.createElement('div');
-        div.className = 'result-row';
-        const simClass = r.similarity >= 85 ? 'high' : r.similarity >= 50 ? 'medium' : 'low';
-        const simText = r.similarity ? `${r.similarity}%` : '—';
+        div.className = 'investigation-card';
 
         div.innerHTML = `
-            <strong>Video ${r.index}:</strong>
-            <a href="${r.video_url}" target="_blank">${r.title}</a><br>
-            Similarity: <span class="${simClass}">${simText}</span>
-            ${r.status === 'error' ? `<br><small style="color:red;">${r.message}</small>` : ''}
+            <div class="video-section">
+                ${videoId ? `
+                <div class="video-preview">
+                    <img class="video-thumb" src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg">
+                    <a class="watch-btn" href="${r.video_url}" target="_blank">▶ Watch on YouTube</a>
+                </div>` : ''}
+            </div>
+
+            <div class="analysis-section">
+                <div class="video-title"><strong>Video ${r.index}</strong></div>
+                <a class="video-link" href="${r.video_url}" target="_blank">${r.title}</a>
+
+                <div class="similarity-block">
+                    <div class="similarity-label">
+                        Voice Similarity
+                        <span class="similarity-value ${simClass}">${similarity ? similarity+'%' : '—'}</span>
+                    </div>
+                    <div class="similarity-bar">
+                        <div class="similarity-fill ${simClass}" style="width:${similarity}%"></div>
+                    </div>
+                </div>
+
+                <div class="verdict ${simClass}">${verdict}</div>
+            </div>
         `;
+
         container.appendChild(div);
     });
+    showSearchMore();
 }
-
-// Delete temp files on page unload
-window.addEventListener("beforeunload", function () {
-    navigator.sendBeacon("/search_yt/delete_temp_files/");
-});
 </script>
 
 {% endblock %}
